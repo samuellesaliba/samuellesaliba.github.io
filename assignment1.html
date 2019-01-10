@@ -4,7 +4,7 @@
         <meta charset="utf-8"> 
         <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
 
-        <title>Example Student's HCDE 439 Physical Computing Page!</title> 
+        <title>Samuelle Saliba's HCDE 439 Physical Computing Page!</title> 
 
         <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
 
@@ -12,12 +12,35 @@
     <body> 
 
         <div class="header">
-            <h1>Example Student's Assignment 1!</h1>
+            <h1>Sam's Assignment 1!</h1>
             <p>
-            <img src="red-panda.jpg" width=400></a>
+            <img src="blinkgif.gif" width=400></a>
             </p>
             <p>
-            Here is all the documentation for assignment 1!
+            // the setup function runs once when you press reset or power the board
+void setup() {
+  // initialize digital pin LED_BUILTIN as an output.
+  pinMode(LED_BUILTIN, OUTPUT); //red LED
+  pinMode(7, OUTPUT); //yellow LED
+  pinMode(10, OUTPUT); //green LED
+  
+}
+
+// the loop function runs over and over again forever
+void loop() {
+  digitalWrite(LED_BUILTIN, HIGH);   // turn the red LED on
+  delay(500);                       // wait for a 50ms
+  digitalWrite(7, HIGH);    // turn the yellow LED on
+  delay(500);                       // wait for 50ms
+    digitalWrite(10, HIGH);   // turn the green LED on
+  delay(1000);                       // wait for a second
+    digitalWrite(10, LOW);   // turn the red LED on
+  delay(500);                       // wait for a 50ms
+  digitalWrite(7, LOW);    // turn the yellow LED on
+  delay(500);                       // wait for 50ms
+    digitalWrite(LED_BUILTIN, LOW);   // turn the green LED on
+  delay(500);                       // wait for a second
+}
             </p>
         </div>
         
