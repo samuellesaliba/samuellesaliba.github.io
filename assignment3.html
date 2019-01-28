@@ -1,0 +1,138 @@
+<!DOCTYPE html> 
+<html> 
+    <head> 
+        <meta charset="utf-8"> 
+        <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+        <title>Samuelle Saliba's HCDE 439 Physical Computing Page!</title> 
+
+        <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
+
+    </head> 
+    <body> 
+
+        <div class="header">
+            <h1>Sam's Assignment 3!</h1>
+<h2> Schematic </h2>
+<p> 
+<img src="sensorschematic.jpg" width=400></a> <br>
+This schematic shows the manner in which the resistors and LEDs were connected to the arduino and one another, as well as how the button was connected to a resistor and ground as well as pin 2 to sense its state. The resistors for the LEDs were 220 Ohm resistors because the arduino was putting out about 5V and each LED created a 1.8V drop for a total of 3.2V, with a desired current of 20mA 3.2V/0.02A=160 Ohms. The closest resistor to 160 I have without going under is 220. For the button resistor, it just needs to keep the current flowing from the 5V pin to ground when the button is pressed limited, so it can be quite large without inhibiting the operation of the circuit. Because of this I chose the 100K Ohm resistor.
+</p>
+<h2> Circuit </h2>
+<p> 
+<img src="sensorcircuit.jpg" width=400></a> <br>
+This circuit has two main parts: the LEDs and the button. The LEDs are connected to pins on the board that supply power, there are resistors between the pins and LEDs to keep the current under what the LEDs can handle. Each of these LEDs connects to the same ground. The button part of the circuit uses the 5V pin to connect to the button and then through a resistor and to the same ground as the LEDs. Between the button and resistor is a connection to pin 2 which is configured as an input and senses when there are electrons flowing through the button circuit to see if the button is pressed.</p>
+<h2> Code Snippet </h2>
+<p> 
+The following code keeps the LEDs fading in and out unless the button is held in which case they stay glowing bright until it is released.</p>
+
+<code>// set name for pin 2 to buttonPin <br>
+const int buttonPin = 2;     <br>
+
+
+// set initial button state to 0<br>
+
+int buttonState = 0;         <br>
+
+
+// set starting brightness of LED to 0<br>
+
+int brightness = 0;    <br>
+
+// set amount for LED brightness to fade<br>
+
+int fadeAmount = 5;    <br>
+
+// initialize putput and input pins<br>
+
+void setup() {<br>
+
+  // goes through pins 2-11 one at a time<br>
+
+  for (int thisPin = 2; thisPin < 12; thisPin++) {<br>
+
+   // initializes each as an output<br>
+
+    pinMode(thisPin, OUTPUT);<br>
+
+
+  }<br>
+
+  // initialize pin 2 that senses the button as an input<br>
+
+  pinMode(buttonPin, INPUT);<br>
+
+}<br>
+
+//this code repeats as long as the arduino is powered<br>
+
+void loop() {<br>
+
+  // read the state of the pushbutton value<br>
+
+  buttonState = digitalRead(buttonPin);<br>
+
+//check if button is pressed and if so execute<br>
+
+   if (buttonState == HIGH) {<br>
+
+    // goes throgh pins 9-11<br>
+
+    for (int thisPin = 9; thisPin < 12; thisPin++){<br>
+
+      //sets each pin to on and bright<br>
+
+    digitalWrite(thisPin, HIGH);}<br>
+
+//if the button is not pressed<br>
+
+  }else {<br>
+
+
+  // for each pin 9-11 <br>
+
+  for (int thisPin = 9; thisPin < 12; thisPin++) {<br>
+
+     // set the brightness to 0<br>
+
+  analogWrite(thisPin, brightness);<br>
+
+
+  // change the brightness by -5 for next time through the loop<br>
+
+  brightness = brightness + fadeAmount;<br>
+
+
+  // check if at end of a fade or bright cycle<br>
+
+  if (brightness <= 0 || brightness >= 255) {<br>
+
+    //reverse cycle <br>
+
+    fadeAmount = -fadeAmount;<br>
+
+  }<br>
+
+  // wait for 30 milliseconds to see the dimming effect<br>
+
+  delay(30);<br>
+
+  }<br>
+
+}<br>
+
+   }<br>
+
+           <code>
+            </p>
+<h2> Circuit Operation</h2>
+            <p>
+            <img src="sensor.gif" width=400></a>
+            </p>
+            <p>
+
+        </div>
+        
+    </body>
+</html>
+
