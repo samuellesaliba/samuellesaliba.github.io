@@ -23,9 +23,6 @@ This schematic shows the manner in which the resistors and LEDs were connected t
 <img src="sensorcircuit.jpg" width=400></a> <br>
 This circuit has two main parts: the LED and the LDR. The LED is connected to an analog write pin on the board that supplies varrying voltage to the LED. A resistor keeps the current to what the LED can handle. The sensor part of the circuit uses the 5V pin connected to the LDR with a connection to analog read pin 0 to sense the variation in voltage through the LDR then through a resistor and to the same ground as the LED. The V out can be calculated by the constant resistance from the resistor (10K) divided by the sum of the constant and variable resistance (LDR max 1M)times the V in. Given that, the minimum V out is 5V(10K/(1M+10K))= ~.05V. The LDR can get below 1K resistance in very bright light, at 1K the V out would be 5V(10K/(1K+10K))= ~4.54V.
 <h2> Code Snippet </h2>
-<p> 
-The following code keeps the LEDs fading in and out unless the button is held in which case they stay glowing bright until it is released.</p>
-
 <code> // assign names to A0 and 9 to make clear which is input and <br>output in the code<br>
 const int analogInPin = A0;<br> 
 const int analogOutPin = 9; <br>
