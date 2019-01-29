@@ -16,114 +16,65 @@
 <h2> Schematic </h2>
 <p> 
 <img src="sensorschematic.jpg" width=400></a> <br>
-This schematic shows the manner in which the resistors and LEDs were connected to the arduino and one another, as well as how the button was connected to a resistor and ground as well as pin 2 to sense its state. The resistors for the LEDs were 220 Ohm resistors because the arduino was putting out about 5V and each LED created a 1.8V drop for a total of 3.2V, with a desired current of 20mA 3.2V/0.02A=160 Ohms. The closest resistor to 160 I have without going under is 220. For the button resistor, it just needs to keep the current flowing from the 5V pin to ground when the button is pressed limited, so it can be quite large without inhibiting the operation of the circuit. Because of this I chose the 100K Ohm resistor.
+This schematic shows the manner in which the resistors and LEDs were connected to the arduino and one another, as well as how the button was connected to a resistor and ground as well as pin 2 to sense its state. The resistors for the LEDs were 220 Ohm resistors because the arduino was putting out about 5V and each LED created a 3.3V drop for a total of 1.8V, with a desired current of 20mA 1.8V/0.02A=90 Ohms. The closest resistor to 90 I have without going under is 220. For the resistor on the part of the circuit that connects the 5V to LDR to ground I needed a resistor that would limit current when the LDR was at its minimum resistance. With a desired current of 20mA and a voltage of 5V (5V/.02A = 250 Ohms) 10K Ohms is more than enough to limit the current to what the arduino can handle.
 </p>
 <h2> Circuit </h2>
 <p> 
 <img src="sensorcircuit.jpg" width=400></a> <br>
-This circuit has two main parts: the LEDs and the button. The LEDs are connected to pins on the board that supply power, there are resistors between the pins and LEDs to keep the current under what the LEDs can handle. Each of these LEDs connects to the same ground. The button part of the circuit uses the 5V pin to connect to the button and then through a resistor and to the same ground as the LEDs. Between the button and resistor is a connection to pin 2 which is configured as an input and senses when there are electrons flowing through the button circuit to see if the button is pressed.</p>
+This circuit has two main parts: the LED and the LDR. The LED is connected to an analog write pin on the board that supplies varrying voltage to the LED. A resistor keeps the current to what the LED can handle. The sensor part of the circuit uses the 5V pin connected to the LDR with a connection to analog read pin 0 to sense the variation in voltage through the LDR then through a resistor and to the same ground as the LED. The V out can be calculated by the constant resistance from the resistor (10K) divided by the sum of the constant and variable resistance (LDR max 1M)times the V in. Given that, the minimum V out is 5V(10K/(1M+10K))= ~.05V. 
 <h2> Code Snippet </h2>
 <p> 
 The following code keeps the LEDs fading in and out unless the button is held in which case they stay glowing bright until it is released.</p>
 
-<code>// set name for pin 2 to buttonPin <br>
-const int buttonPin = 2;     <br>
+<code> // assign names to A0 and 9 to make clear which is input and <br>output in the code<br>
+const int analogInPin = A0;<br> 
+const int analogOutPin = 9; <br>
 
+//value read from LDR<br>
+int sensorValue = 0;<br>
+//value output through pin 9<br>
+int outputValue = 0;<br>
 
-// set initial button state to 0<br>
-
-int buttonState = 0;         <br>
-
-
-// set starting brightness of LED to 0<br>
-
-int brightness = 0;    <br>
-
-// set amount for LED brightness to fade<br>
-
-int fadeAmount = 5;    <br>
-
-// initialize putput and input pins<br>
-
+//runs once<br>
 void setup() {<br>
-
-  // goes through pins 2-11 one at a time<br>
-
-  for (int thisPin = 2; thisPin < 12; thisPin++) {<br>
-
-   // initializes each as an output<br>
-
-    pinMode(thisPin, OUTPUT);<br>
-
-
-  }<br>
-
-  // initialize pin 2 that senses the button as an input<br>
-
-  pinMode(buttonPin, INPUT);<br>
-
+  // initialize serial communications at 9600 bps:<br>
+  Serial.begin(9600);<br>
 }<br>
 
-//this code repeats as long as the arduino is powered<br>
-
+//repeats<br>
 void loop() {<br>
+  // read the analog in value<br>
+  sensorValue = analogRead(analogInPin);<br>
+  // map it to the range of the analog out<br>
+  //by changing the first two number from the full 10-bit range<br> (0-1023) to closer to the parameters of input I saw was being <br>sensed <br>
+  //in the serial monitor (450-900) it allows the full spectrum of <br>variation to be mapped to the 8-bit range (0-255)<br>
+  outputValue = map(sensorValue, 450, 900, 0, 255);<br>
+  // change the analog out value:<br>
+  analogWrite(analogOutPin, outputValue);<br>
 
-  // read the state of the pushbutton value<br>
+  // print label for sensor value<br>
+  Serial.print("sensor = ");<br>
+  //print sensor value<br>
+  Serial.print(sensorValue);<br>
+  //print label for output<br>
+  Serial.print("\t output = ");<br>
+  //print output value<br>
+  Serial.println(outputValue);<br>
 
-  buttonState = digitalRead(buttonPin);<br>
-
-//check if button is pressed and if so execute<br>
-
-   if (buttonState == HIGH) {<br>
-
-    // goes throgh pins 9-11<br>
-
-    for (int thisPin = 9; thisPin < 12; thisPin++){<br>
-
-      //sets each pin to on and bright<br>
-
-    digitalWrite(thisPin, HIGH);}<br>
-
-//if the button is not pressed<br>
-
-  }else {<br>
-
-
-  // for each pin 9-11 <br>
-
-  for (int thisPin = 9; thisPin < 12; thisPin++) {<br>
-
-     // set the brightness to 0<br>
-
-  analogWrite(thisPin, brightness);<br>
-
-
-  // change the brightness by -5 for next time through the loop<br>
-
-  brightness = brightness + fadeAmount;<br>
-
-
-  // check if at end of a fade or bright cycle<br>
-
-  if (brightness <= 0 || brightness >= 255) {<br>
-
-    //reverse cycle <br>
-
-    fadeAmount = -fadeAmount;<br>
-
-  }<br>
-
-  // wait for 30 milliseconds to see the dimming effect<br>
-
-  delay(30);<br>
-
-  }<br>
-
+  // wait 2 milliseconds before the next loop for the analog-to-digital<br>
+  // converter to settle after the last reading:<br>
+  delay(2);<br>
 }<br>
-
-   }<br>
-
            <code>
+</p>
+<h2> Serial Monitor Low and High Readouts</h2>
+            <p>
+            <img src="low.jpg" width=400></a>
+            </p>
+<p>
+            <img src="high.jpg" width=400></a>
+            </p>
+
             </p>
 <h2> Circuit Operation</h2>
             <p>
