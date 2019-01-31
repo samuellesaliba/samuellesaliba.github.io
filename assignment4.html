@@ -1,0 +1,86 @@
+<!DOCTYPE html> 
+<html> 
+    <head> 
+        <meta charset="utf-8"> 
+        <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+        <title>Samuelle Saliba's HCDE 439 Physical Computing Page!</title> 
+
+        <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
+
+    </head> 
+    <body> 
+
+        <div class="header">
+            <h1>Sam's Assignment 4!</h1>
+<h2> Schematic </h2>
+<p> 
+<img src="highschem.jpg" width=400></a> <br>
+This schematic shows how the three parts of this circuit (LED strip, transistor, and LDR) are connected and work. The LED strip is shown in the schematic, however this is not a circuit I built, but one that came surface mounted including reisstors and LEDs. The transistor can provide .6A, but this cicuit only uses about .075A. I know this because the full LED strip uses 18 watts and has 300 LEDs which is .6 watts per LED so for my 15 LEDs they should use about .9 watts. P=VI so .9 watts = 12V (from wall power) * current. .9/12=.075A. For the resistor on the part of the circuit that connects the 5V to LDR to ground I needed a resistor that would limit current when the LDR was at its minimum resistance. With a desired current of 20mA and a voltage of 5V (5V/.02A = 250 Ohms) 10K Ohms is more than enough to limit the current to what the arduino can handle. WHAT IS THE PURPOSE OF THE OTHER RESISTOR?
+</p>
+<h2> Circuit </h2>
+<p> 
+<img src="highcircuit.jpg" width=400></a> <br>
+This circuit uses an LDR to sense changes in light, these changes are translated in the arduino code to changes in output from pin 9 which uses a transistor to moderate connection between an external power source and an LED strip. The sensor part of the circuit uses the 5V pin connected to the LDR with a connection to analog read pin 0 to sense the variation in voltage through the LDR then through a resistor and to the same ground as the LED. The V out can be calculated by the constant resistance from the resistor (10K) divided by the sum of the constant and variable resistance (LDR max 1M)times the V in. Given that, the minimum V out is 5V(10K/(1M+10K))= ~.05V. The LDR can get below 1K resistance in very bright light, at 1K the V out would be 5V(10K/(1K+10K))= ~4.54V.
+<h2> Code Snippet </h2>
+// assign names to A0 and 9 to make clear which is input and output <br>in the code
+const int analogInPin = A0;<br>
+const int analogOutPin = 9; <br>
+//value read from LDR<br>
+int sensorValue = 0;<br>
+//value output through pin 9<br>
+int outputValue = 0;<br>
+//runs once<br>
+void setup() {<br>
+// initialize serial communications at 9600 bps:<br>
+Serial.begin(9600);<br>
+//initialize A0 as input allowing it to sense changes in LDR<br> circuit<br>
+pinMode(analogInPin, INPUT);<br>
+//initialize pin 9 as output allowing it to change brightness of<br> LED strip<br>
+pinMode(analogOutPin, OUTPUT);<br>
+
+
+}<br>
+//repeats<br>
+void loop() {<br>
+// read the analog in value<br>
+sensorValue = analogRead(analogInPin);<br>
+// map it to the range of the analog out<br>
+//by changing the first two number from the full 10-bit range<br> (0-1023) to closer to the parameters of input I saw was being <br>sensed<br> 
+//in the serial monitor (400-900) it allows the full spectrum of<br> variation to be mapped to the 8-bit range (0-255)<br>
+outputValue = map(sensorValue, 400, 900, 0, 255);<br>
+// change the analog out value:<br>
+analogWrite(analogOutPin, outputValue);<br>
+// print label for sensor value<br>
+Serial.print("sensor = ");<br>
+//print sensor value<br>
+Serial.print(sensorValue);<br>
+//print label for output<br>
+Serial.print("\t output = ");<br>
+//print output value<br>
+Serial.println(outputValue);<br>
+// wait 2 milliseconds before the next loop for the analog-to-digital<br>
+// converter to settle after the last reading:<br>
+delay(2);<br>
+}           <code>
+</p>
+<h2> Serial Monitor Low and High Readouts</h2>
+            <p>
+            <img src="low.png" width=400></a>
+            </p>
+<p>
+            <img src="high.png" width=400></a>
+            </p>
+
+            </p>
+<h2> Circuit Operation</h2>
+            <p>
+            <img src="sensor.gif" width=400></a>
+            </p>
+            <p>
+
+        </div>
+        
+    </body>
+</html>
+
