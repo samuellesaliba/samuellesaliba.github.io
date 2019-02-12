@@ -21,7 +21,7 @@ This schematic shows the manner in which the servo and joystick were connected t
 <h2> Circuit </h2>
 <p> 
 <img src="servocircuit.jpg" width=400></a> <br>
-No powersource outside the arduino is needed because the servo can run on 5V which the arduino can supply. The servo takes 100ms to move 60 degrees this means the max time it would take is 180degrees/60degrees*100ms = 300ms. I ended up setting my delay to less than that though because it makes the servo seem more responsive to the joystick and the joystick isn't going to stay in a position anyways so the most practical use of the code seemed to be to just move the servo in the general direction the joystick is pointing. 
+No powersource outside the arduino is needed because the servo can run on 5V which the arduino can supply. There is no need for a current limiting resistor or flyback diode because the servo has one built in. The servo takes 100ms to move 60 degrees this means the max time it would take is 180degrees/60degrees*100ms = 300ms. I ended up setting my delay to less than that though because it makes the servo seem more responsive to the joystick and the joystick isn't going to stay in a position anyways so the most practical use of the code seemed to be to just move the servo in the general direction the joystick is pointing. 
 </p>
 <h2> Code Snippet </h2>
 <p> 
