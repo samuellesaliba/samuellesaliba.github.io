@@ -53,7 +53,7 @@ void setup() {
 void loop() {
 //reads the x value of the joystick and records it in the xPosition variable
 xPosition=analogRead(xPin);
-//maps the joystick x position which is between about 0 and 1020 to the range of the servo which would be 0-180 but is set as 0-170 to avoid over turning that was occuring 
+//maps the joystick x position which is between about 0 and 1020 (observed in serial monitor) to the range of the servo which would be 0-180 but is set as 0-170 to avoid over turning that was occuring 
 servoPosition=map(xPosition, 0, 1020, 0, 170);
 
 //prints a label for the motor position to the serial monitor
