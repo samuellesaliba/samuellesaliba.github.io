@@ -8,7 +8,6 @@
 
         <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
 
-
     </head> 
     <body> 
 
@@ -30,54 +29,53 @@ The following code maps changes in the joystick x position to changes in the ser
 </p>
 
 <code>
-//sets the read in from A0 to an integer and names it according to what it is reading <br>
-int xPin = A0;<br>
-//sets an integer variable for the x position and initializes it at 0<br>
-int xPosition = 0;<br>
-//sets an integer variable for the servo position and initializes it at 0<br>
-int servoPosition = 0;<br>
+//sets the read in from A0 to an integer and names it according to what it is reading
+int xPin = A0;
+//sets an integer variable for the x position and initializes it at 0
+int xPosition = 0;
+//sets an integer variable for the servo position and initializes it at 0
+int servoPosition = 0;
 
-//loads the servo libarary<br>
-#include <Servo.h><br>
-//creates a servo object<br>
-Servo myServo; <br>
+//loads the servo libarary
+#include <Servo.h>
+//creates a servo object
+Servo myServo; 
 
-//runs once at the beginning<br>
-void setup() {<br>
-  //initializes the serial monitior<br>
-  Serial.begin(9600);<br>
-  //attatches the servo on pin 9 to the servo object<br>
-  myServo.attach(9); <br>
-}<br>
+//runs once at the beginning
+void setup() {
+  //initializes the serial monitior
+  Serial.begin(9600);
+  //attatches the servo on pin 9 to the servo object
+  myServo.attach(9); 
+}
 
-//runs repeatedly<br>
-void loop() {<br>
-//reads the x value of the joystick and records it in the xPosition variable<br>
-xPosition=analogRead(xPin);<br>
-//maps the joystick x position which is between about 0 and 1020 to the range of the servo which would be 0-180 but is set as 0-170 to avoid over turning that was occuring <br>
-servoPosition=map(xPosition, 0, 1020, 0, 170);<br>
+//runs repeatedly
+void loop() {
+//reads the x value of the joystick and records it in the xPosition variable
+xPosition=analogRead(xPin);
+//maps the joystick x position which is between about 0 and 1020 to the range of the servo which would be 0-180 but is set as 0-170 to avoid over turning that was occuring 
+servoPosition=map(xPosition, 0, 1020, 0, 170);
 
-//prints a label for the motor position to the serial monitor<br>
-Serial.print("Motor Position: ");<br>
-//prints the motor position to the serial monitor<br>
-Serial.print(servoPosition);<br>
-//moves the serial monitor to a new line<br>
-Serial.println();<br>
+//prints a label for the motor position to the serial monitor
+Serial.print("Motor Position: ");
+//prints the motor position to the serial monitor
+Serial.print(servoPosition);
+//moves the serial monitor to a new line
+Serial.println();
 
 
-//set the servo position<br>
-myServo.write(servoPosition); 
-//some angle between 0 and 180<br>
+//set the servo position
+myServo.write(servoPosition); //some angle between 0 and 180
 
-//wait for the servo to move some and the monitor to write<br>
-delay(100);<br>
+//wait for the servo to move some and the monitor to write
+delay(100);
 
 }<br>
 <code>
             </p>
 <h2> Circuit Operation</h2>
             <p>
-            <img src="blinkgif.gif" width=400></a>
+            <img src="servo.gif" width=400></a>
             </p>
             <p>
 
